@@ -12,7 +12,9 @@ services:
       - 6379
 
   go-server:
-    image: benhassan98/ideanest-go-image
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile  
     container_name: backend
     environment:
       - MONGO_URL=mongodb://localhost:27017
