@@ -6,10 +6,12 @@ COPY go.mod go.sum ./
 
 RUN go mod download
 
-COPY *.go ./
+COPY . .
 
-RUN CGO_ENABLED=0 GOOS=linux go build -o /docker-gs-ping
+COPY ./cmd/main.go .
+
+RUN CGO_ENABLED=0 GOOS=linux go build -o /docker-go
 
 EXPOSE 8080
 
-CMD ["/docker-gs-ping"]
+CMD ["/docker-go"]
