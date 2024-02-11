@@ -28,7 +28,12 @@ func AuthMiddleware(redisClient *redis.Client) gin.HandlerFunc {
 			c.Next()
 			return
 		}
-
+		
+		if c.Request.Header.Get("Authorization") == ""{
+			c.AbortWithStatus(http.StatusUnauthorized)
+			return
+		}
+		
 		result, _ := redisClient.Get(ctx, strings.Split(c.Request.Header.Get("Authorization"), " ")[1]).Bool()
 
 		if result {
