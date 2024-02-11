@@ -1,0 +1,7 @@
+database:
+  url: mongodb://localhost:27017
+  dbName: ideanest
+
+redis:
+  address: 127.0.0.1:6379
+
