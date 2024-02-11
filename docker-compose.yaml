@@ -17,7 +17,7 @@ services:
       dockerfile: ./docker/Dockerfile  
     container_name: backend
     environment:
-      - MONGO_URL=mongodb://localhost:27017
+      - MONGO_URL=mongodb://mongo:27017
       - REDIS_ADDRESS=redis:6379
     ports:
       - 8080:8080
