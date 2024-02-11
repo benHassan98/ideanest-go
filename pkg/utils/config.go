@@ -25,7 +25,7 @@ type ServerSettings struct {
 }
 
 func ReadConfig() (Config, error) {
-
+	
 	databaseConfig, err := readDatabaseConfig()
 
 	if err != nil {
@@ -47,47 +47,51 @@ func ReadConfig() (Config, error) {
 func readDatabaseConfig() (Config, error) {
 	var config Config
 
-	viper.SetConfigName("database-config")
-	viper.SetConfigType("yaml")
-	viper.AddConfigPath("./config")
+	config.Database.Url = os.Getenv("MONGO_URL")
+	config.Database.DbName = "ideanest"
+	config.Redis.Address = os.Getenv("REDIS_ADDRESS")
+	
+	if config.Database.Url == ""{
 
-	if err := viper.ReadInConfig(); err != nil {
-		return config, err
+		viper.SetConfigName("database-config")
+		viper.SetConfigType("yaml")
+		viper.AddConfigPath("./config")
+
+		if err := viper.ReadInConfig(); err != nil {
+			return config, err
+		}
+
+		if err := viper.Unmarshal(&config); err != nil {
+			return config, err
+		}
+		
 	}
-
-	if err := viper.Unmarshal(&config); err != nil {
-		return config, err
-	}
-
-	if config.Database.Url == "" {
-
-		config.Database.Url = os.Getenv("MONGO_URL")
-		config.Database.DbName = "ideanest"
-		config.Redis.Address = os.Getenv("REDIS_ADDRESS")
-
-	}
-
+	
 	return config, nil
 }
 
 func readAppConfig() (Config, error) {
 	var config Config
 
-	viper.SetConfigName("app-config")
-	viper.SetConfigType("yaml")
-	viper.AddConfigPath("./config")
+	config.Server.Port = os.Getenv("PORT")
+	
+	if config.Server.Port == ""{
 
-	if err := viper.ReadInConfig(); err != nil {
-		return config, err
+		viper.SetConfigName("app-config")
+		viper.SetConfigType("yaml")
+		viper.AddConfigPath("./config")
+
+		if err := viper.ReadInConfig(); err != nil {
+			return config, err
+		}
+
+		if err := viper.Unmarshal(&config); err != nil {
+			return config, err
+		}
+		
+		
 	}
-
-	if err := viper.Unmarshal(&config); err != nil {
-		return config, err
-	}
-
-	if config.Server.Port == "" {
-		config.Server.Port = os.Getenv("PORT")
-	}
-
+	
+	
 	return config, nil
 }
